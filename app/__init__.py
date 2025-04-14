@@ -52,7 +52,13 @@ def chat():
         })
         
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        if "insufficient_quota" in str(e):
+            # Fallback to a different provider
+            return jsonify({
+                "content": "I'm currently at capacity. Please try again later.",
+                "fallback": True
+            })
+        raise e
 
 @app.route("/check_api")
 def check_api():
