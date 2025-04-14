@@ -62,5 +62,20 @@ def chat():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
         
+
+@app.route("/check_api")
+def check_api():
+    try:
+        models = openai.Model.list()
+        return jsonify({
+            "status": "success",
+            "model_count": len(models.data)
+        })
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "error": str(e)
+        }), 500
+
 if __name__ == "__main__":
     app.run(debug=True)
