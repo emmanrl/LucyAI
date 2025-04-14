@@ -36,16 +36,29 @@ def admin():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.json
+    if not request.json or "messages" not in request.json:
+        return jsonify({"error": "Invalid request format"}), 400
+    
     try:
         response = openai.ChatCompletion.create(
             model=app.config["MODEL"],
-            messages=data["messages"],
+            messages=request.json["messages"],
+            temperature=0.7,
+            max_tokens=500
         )
-        # Ensure we're returning the content properly
+        
+        if not response.choices:
+            return jsonify({"error": "No response from AI"}), 500
+            
         return jsonify({
-            "content": response.choices[0].message['content']
+            "content": response.choices[0].message["content"],
+            "model": app.config["MODEL"]
         })
+        
+    except openai.error.AuthenticationError:
+        return jsonify({"error": "Invalid API key"}), 401
+    except openai.error.RateLimitError:
+        return jsonify({"error": "Rate limit exceeded"}), 429
     except Exception as e:
         return jsonify({"error": str(e)}), 500
         
