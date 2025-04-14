@@ -1,4 +1,6 @@
 flask>=2.0.0
+torch
+transformers
 openai>=1.0.0
 python-dotenv
 gunicorn
