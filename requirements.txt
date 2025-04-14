@@ -1,5 +1,2 @@
-torch>=2.0.0
-transformers>=4.30.0
-flask>=2.0.0
-gradio>=3.0.0
-sentencepiece>=0.1.95
+gunicorn>=20.1.0
+accelerate>=0.21.0
