@@ -50,16 +50,30 @@
                 
                 const data = await response.json();
                 
-                // Add AI response to chat
-                chatHistory.innerHTML += `
-                    <div class="message ai-message">
-                        <div class="bubble">${data.content}</div>
-                    </div>
-                `;
+                // Check if response contains content
+                if (data.content) {
+                    chatHistory.innerHTML += `
+                        <div class="message ai-message">
+                            <div class="bubble">${data.content}</div>
+                        </div>
+                    `;
+                } else {
+                    console.error("No content in response:", data);
+                    chatHistory.innerHTML += `
+                        <div class="message ai-message error">
+                            <div class="bubble">Sorry, I couldn't process that request.</div>
+                        </div>
+                    `;
+                }
                 
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             } catch (error) {
                 console.error("Error:", error);
+                chatHistory.innerHTML += `
+                    <div class="message ai-message error">
+                        <div class="bubble">Connection error. Please try again.</div>
+                    </div>
+                `;
             }
         });
     </script>
