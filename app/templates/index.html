@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <header>
+            <h1>{{ app_name }}</h1>
+            <a href="/admin" class="admin-link">Admin</a>
+        </header>
+        <div id="chat-history"></div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Ask me anything...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+    <script>
+        document.getElementById("send-btn").addEventListener("click", async () => {
+            const input = document.getElementById("user-input");
+            const message = input.value.trim();
+            if (!message) return;
+            
+            input.value = "";
+            
+            // Add user message to chat
+            const chatHistory = document.getElementById("chat-history");
+            chatHistory.innerHTML += `
+                <div class="message user-message">
+                    <div class="bubble">${message}</div>
+                </div>
+            `;
+            
+            // Scroll to bottom
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+            
+            // Get AI response
+            try {
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        messages: [{ role: "user", content: message }]
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // Add AI response to chat
+                chatHistory.innerHTML += `
+                    <div class="message ai-message">
+                        <div class="bubble">${data.content}</div>
+                    </div>
+                `;
+                
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        });
+    </script>
+</body>
+</html>
