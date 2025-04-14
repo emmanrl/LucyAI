@@ -1,2 +1,2 @@
 #!/bin/bash
-pip install -r requirements.txt
+gunicorn app.app:app --workers=1 --bind=0.0.0.0:$PORT
