@@ -127,3 +127,8 @@ input, select {
     border-radius: 6px;
     font-size: 16px;
 }
+.error .bubble {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
