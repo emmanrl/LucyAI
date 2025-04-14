@@ -1,6 +1,4 @@
-flask>=2.0.0
-torch
-transformers
-openai>=1.0.0
-python-dotenv
-gunicorn
+flask==2.3.2
+gunicorn==20.1.0
+torch==2.0.1
+transformers==4.30.2
